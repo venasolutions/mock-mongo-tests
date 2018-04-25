@@ -4,8 +4,6 @@ import com.github.fakemongo.Fongo;
 import com.mongodb.MongoClient;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.mongodb.morphia.Datastore;
-import org.mongodb.morphia.DatastoreImpl;
 import org.mongodb.morphia.Morphia;
 
 import static org.junit.Assert.*;
@@ -13,20 +11,19 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PersonMongoClientTest {
+public class PersonMongoClientFongoTest {
 	private static PersonMongoClient personDb;
 
 	@BeforeClass
 	public static void setup() {
 		Fongo fongo = new Fongo("fongo mock server");
-		MongoClient mongoClient =  fongo.getMongo();
+		MongoClient mongoClient = fongo.getMongo();
+		Morphia morphia = new Morphia();
 
 		// comment in the line below to test against a real MongoDB instance running at localhost:27017
 //		mongoClient =  new MongoClient();
 
-		Morphia morphia = new Morphia();
-		Datastore dataStore = new DatastoreImpl(morphia, mongoClient, "mydb");
-		personDb = new PersonMongoClient(dataStore);
+		personDb = new PersonMongoClient(mongoClient, morphia, "mydb");
 	}
 
 	@Test
@@ -41,6 +38,6 @@ public class PersonMongoClientTest {
 		personList.add(jSmithDupe);
 		personDb.bulkInsertPerson(personList);
 
-		assertEquals(1000.00, personDb.getPerson(jSmith).getAccountBalance(), 1E-15);
+		assertEquals(1000.00, personDb.getPerson(jSmith).getAccountBalance(), 0);
 	}
 }

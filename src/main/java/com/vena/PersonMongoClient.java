@@ -7,19 +7,21 @@ import com.mongodb.BulkWriteException;
 import com.mongodb.BulkWriteOperation;
 import com.mongodb.DBObject;
 
+import com.mongodb.MongoClient;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.DatastoreImpl;
+import org.mongodb.morphia.Morphia;
 import org.mongodb.morphia.dao.BasicDAO;
 import org.mongodb.morphia.query.Query;
 
 public class PersonMongoClient extends BasicDAO<Person, Long> {
-	private final String collname = "person";
-	public String getCollectionName() {
-		return collname;
-	}
-
 	public PersonMongoClient(Datastore dataStore) {
 		super(dataStore);
+		createIndexes();
+	}
+
+	public PersonMongoClient(MongoClient mongoClient, Morphia morphia, String dbName) {
+		super(mongoClient, morphia, dbName);
 		createIndexes();
 	}
 
@@ -36,10 +38,6 @@ public class PersonMongoClient extends BasicDAO<Person, Long> {
 		q.field("name").equal(dupe.getName());
 		q.field("bday").equal(dupe.getBday());
 		return q.get();
-	}
-
-	public void savePerson(Person toSave) {
-		super.save(toSave);
 	}
 
 	public void bulkInsertPerson(List<Person> personsToInsert) {
@@ -59,7 +57,7 @@ public class PersonMongoClient extends BasicDAO<Person, Long> {
 
 					if (fromMongo != null) {
 						duplicatePerson.setId(fromMongo.getId());
-						savePerson(duplicatePerson);
+						save(duplicatePerson);
 					}
 				} else {
 					//only handle bulkwrite errors if they're all duplicate key exceptions
