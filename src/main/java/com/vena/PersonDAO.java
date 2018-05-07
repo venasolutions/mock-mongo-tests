@@ -14,13 +14,13 @@ import org.mongodb.morphia.Morphia;
 import org.mongodb.morphia.dao.BasicDAO;
 import org.mongodb.morphia.query.Query;
 
-public class PersonMongoClient extends BasicDAO<Person, Long> {
-	public PersonMongoClient(Datastore dataStore) {
+public class PersonDAO extends BasicDAO<Person, Long> {
+	public PersonDAO(Datastore dataStore) {
 		super(dataStore);
 		createIndexes();
 	}
 
-	public PersonMongoClient(MongoClient mongoClient, Morphia morphia, String dbName) {
+	public PersonDAO(MongoClient mongoClient, Morphia morphia, String dbName) {
 		super(mongoClient, morphia, dbName);
 		createIndexes();
 	}

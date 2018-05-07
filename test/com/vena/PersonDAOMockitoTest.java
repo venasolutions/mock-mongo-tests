@@ -12,15 +12,15 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-public class PersonMongoClientMockitoTest {
+public class PersonDAOMockitoTest {
 
-	private static PersonMongoClient personDb;
-	@Spy private static PersonMongoClient fakePersonDb;
+	private static PersonDAO personDb;
+	@Spy private static PersonDAO fakePersonDb;
 
 	@BeforeClass
 	public static void setup() {
 		Datastore dataStore = Mockito.mock(DatastoreImpl.class);
-		personDb = new PersonMongoClient(dataStore);
+		personDb = new PersonDAO(dataStore);
 	}
 
 	@Test
