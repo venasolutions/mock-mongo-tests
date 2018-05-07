@@ -55,10 +55,8 @@ public class PersonDAO extends BasicDAO<Person, Long> {
 					Person duplicatePerson = personsToInsert.get(e.getIndex());
 					Person fromMongo = getPerson(duplicatePerson);  // look it up in the collection
 
-					if (fromMongo != null) {
-						duplicatePerson.setId(fromMongo.getId());
-						save(duplicatePerson);
-					}
+					duplicatePerson.setId(fromMongo.getId());
+					save(duplicatePerson);
 				} else {
 					//only handle bulkwrite errors if they're all duplicate key exceptions
 					throw bwe;
